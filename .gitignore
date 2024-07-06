@@ -1,0 +1,51 @@
+# Compiled object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled executables
+*.exe
+*.out
+
+# Dependency directories
+bin/
+build/
+lib/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sln
+*.vcxproj
+*.xcodeproj
+
+# Build output
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Generated files
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.gif
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
