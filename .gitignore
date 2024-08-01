@@ -1,3 +1,5 @@
+testing/
+
 # Compiled object files
 *.o
 *.ko
@@ -49,3 +51,6 @@ Makefile
 # Miscellaneous
 .DS_Store
 Thumbs.db
+
+*.cfg
+*.pt
