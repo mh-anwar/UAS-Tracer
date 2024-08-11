@@ -2,10 +2,12 @@ import cv2
 from ultralytics import YOLO
 
 # load yolov8 - attempt interchanging w/other models
-yolo = YOLO("yolov10.pt")
+yolo = YOLO("yolov10s.pt")
 
 # start video capture
 videoCap = cv2.VideoCapture(0)
+
+# calibration of camera may be needed
 
 while True:
     # read each frame
