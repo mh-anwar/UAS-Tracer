@@ -69,7 +69,7 @@ def main():
             col = input[: iStar - 1]
             np.append(Vs, col)
         np.append(Vs, input[:iStar])
-    VPrime = np.cross(
+    VStar = np.cross(
         np.array(
             [
                 [np.cos(thetaStar), np.sin(thetaStar)],
@@ -79,6 +79,57 @@ def main():
         Vs,
     )
     # Algorithm #2
+    # Input Ly, dStarP, VStar, Ns, M - all fake values for the next few lines
+    dStarP = 0
+    Ly = 2
+    Ns = 10
+    y = []  # I think this is some multi-dimension array
+    x = 0
+    n = 0
+    f = 0
+    # Output Wn, Wf
+
+    for _ in range(len(y)):
+        # I think this is populating n rows of y with Ly/2?
+        y[n, 1] = Ly / 2
+        y[f, 1] = Ly / 2
+    # Line 3
+    for j in range(2, Ns):
+        y[n, j] = y[n, j - 1] + dStarP
+        y[f, j] = y[f, j - 1] + dStarP
+
+    # Line 7
+    for i in range(len(Ns)):
+        for j in range(M, 2):
+            if VStar[2, j] >= y[n, i]:
+                k = (VStar[1, j] - VStar[1, j + 1]) / (VStar[2, j] - VStar[2, j + 1])
+                x[n, i] = (
+                    k * (y[n, i] - VStar[2, j]) + VStar[1, j]
+                )  # where does x come from
+    # Line 16
+    for i in range(len(Ns)):
+        for j in range(2, M):
+            if VStar[2, j] >= y[f, i]:
+                k = (VStar[1, j] - VStar[1, j - 1]) / (VStar[2, j] - VStar[2, j - 1])
+                x[f, i] = (
+                    k * (y[f, i] - VStar[2, j]) + VStar[1, j]
+                )  # where does x come from
+
+    # Line 25: Wn
+    Wn = np.array([])
+    np.append(Wn, x[n, 1])
+    np.append(Wn, y[n, 1])
+    for i in range(2, Ns):
+        np.append(Wn, x[n, i])
+        np.append(Wn, y[n, i])
+
+    # Line 26: Wf
+    Wf = np.array([])
+    np.append(Wf, x[n, 1])
+    np.append(Wf, y[n, 1])
+    for i in range(2, Ns):
+        np.append(Wf, x[n, i])
+        np.append(Wf, y[n, i])
 
 
 if __name__ == "__main__":
