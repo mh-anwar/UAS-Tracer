@@ -1,19 +1,24 @@
 import cv2
+import streamlit as st
 from ultralytics import YOLO
 
-# load yolov8 - attempt interchanging w/other models
 yolo = YOLO("yolov10s.pt")
 
-# start video capture
-videoCap = cv2.VideoCapture(0)
+st.title("Drone Feed HUD")
 
-# calibration of camera may be needed
+source = cv2.VideoCapture(0)  # device for video capture
+frame_placeholder = st.empty()  # placeholder for camera feed
 
-while True:
-    # read each frame
-    ret, frame = videoCap.read()
-    if not ret:
-        continue
+# Get these values from pathPlanning and trajectory scripts
+st.write("Drone heading: 33 degrees")
+st.write("Drone direction: North-West")
+
+while cv2.waitKey(1) != 27:  # Escape
+    has_frame, frame = source.read()
+
+    if not has_frame:
+        st.error("Failed to capture video frame")
+        break
     results = yolo.track(frame, stream=True)
 
     # process each video frame
@@ -44,11 +49,12 @@ while True:
                     (255, 0, 0),
                     2,
                 )
-    # show image, if e is pressed then Exit
-    cv2.imshow("frame", frame)
-    if cv2.waitKey(1) & 0xFF == ord("e"):
-        break
+    # Convert the frame from BGR to RGB format (OpenCV uses BGR by default)
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-# end video capture + destroy frame window
-videoCap.release()
+    # Display the frame in Streamlit
+    frame_placeholder.image(frame, channels="RGB")
+
+
+source.release()
 cv2.destroyAllWindows()
