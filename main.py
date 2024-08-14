@@ -1,3 +1,4 @@
+# Executes HUD, runs basic object detection and will have data from ./pathPlanning.py
 import cv2
 import streamlit as st
 from ultralytics import YOLO
