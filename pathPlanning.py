@@ -14,6 +14,7 @@ print("# of Cols: ", M)
 
 # Output: d*, θ*, Vf
 def main():
+    print("Algorithm 1: Sweep Direction Optimization")
     # Algorithm 1
     # d, θ and Vf are labeled as OUTput for now
     dStar = 0
@@ -31,63 +32,27 @@ def main():
                 [-np.sin(theta), np.cos(theta)],
             ]
         )
-        print("Test 1")
         Ṽ = rotationMatrix @ V
         d = np.amax(Ṽ[1]) - Ṽ[1, i]
         if i == 1 or d < dStar:
             dStar = d
             thetaStar = theta
             iStar = i  # ?
-            print(dStar, thetaStar, iStar)
     Vs = np.array([])
     if iStar == M:
-        Vs = np.append(
-            Vs,
-            V[:M],
-        )
-        for i in range(M):
-            col = V[:i]
-            Vs = np.append(
-                Vs,
-                col,
-            )
+        Vs = np.hstack([V[:, M - 1 :], V[:, : M - 1]])  # possible place for error (M-1)
     else:
-        # different Vs
-        Vs = np.append(
-            Vs,
-            V[:iStar],
-        )
-
-        for i in range(M):
-            col = V[: iStar + 1]
-            Vs = np.append(
-                Vs,
-                col,
-            )
-        Vs = np.append(
-            Vs,
-            V[:0],
-        )
-        for i in range(M):
-            col = V[: iStar - 1]
-            Vs = np.append(
-                Vs,
-                col,
-            )
-        Vs = np.append(
-            Vs,
-            V[:iStar],
-        )
+        Vs = np.hstack([V[:, iStar - 1 :], V[:, : iStar - 1]])
     rotationMatrix2 = np.array(
         [
             [np.cos(thetaStar), np.sin(thetaStar)],
             [-np.sin(thetaStar), np.cos(thetaStar)],
         ]
     )
-    print(Vs)
-    print(Vs.shape, rotationMatrix2.shape)
     VStar = rotationMatrix2 @ Vs
-
+    print("VStar", VStar)
+    print()
+    print("Algorithm 2: Waypoint Generation")
     # Algorithm #2
     # Input Ly, dStarP, VStar, Ns, M - all fake values for the next few lines
     dStarP = 0
