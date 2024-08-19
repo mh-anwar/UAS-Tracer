@@ -5,19 +5,11 @@
 import numpy as np
 
 # Input: Map vertex Matrix - 40 by 140m rectangle - "the matrix containing column-wise stacked polygon vertices"
-# fmt: off
-input = np.array(
-    [
-        [0, 0, 0, 40, 140], 
-        [40, 140, 0, 0, 0]
-    ]
-)
+V = np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])
 # ([[0, 0], [0, 40], [140, 40], [140, 0], [0, 0]])
 # do I use 2x5 or 5x2
-# fmt: on
-dimensions = input.shape
-rows, M = dimensions  # row and columns of input matrix
-print(dimensions)
+M = V.shape[1] - 1  # this is the number of edges, which is less than the full loop
+print("# of Cols: ", M)
 
 
 # Output: d*, θ*, Vf
@@ -30,21 +22,17 @@ def main():
     iStar = 0
 
     # matlab code index 2 is actually index 1
-    for i in range(M):
+    for i in range(1, M):
 
-        theta = np.arctan2(
-            (input[1, i + 1] - input[1, i]), (input[0, i + 1] - input[0, i])
-        )
+        theta = np.arctan2((V[1, i + 1] - V[1, i]), (V[0, i + 1] - V[0, i]))
         rotationMatrix = np.array(
             [
                 [np.cos(theta), np.sin(theta)],
                 [-np.sin(theta), np.cos(theta)],
             ]
         )
-        Ṽ = np.cross(
-            rotationMatrix,
-            input,
-        )
+        print("Test 1")
+        Ṽ = rotationMatrix @ V
         d = np.amax(Ṽ[1]) - Ṽ[1, i]
         if i == 1 or d < dStar:
             dStar = d
@@ -53,31 +41,53 @@ def main():
             print(dStar, thetaStar, iStar)
     Vs = np.array([])
     if iStar == M:
-        # this makes 0 sense "[col(Ṽ )M col(Ṽ )1 · · · col(Ṽ )M ];"
-        np.append(Vs, input[:M])
+        Vs = np.append(
+            Vs,
+            V[:M],
+        )
         for i in range(M):
-            col = input[:i]
-            np.append(Vs, col)
+            col = V[:i]
+            Vs = np.append(
+                Vs,
+                col,
+            )
     else:
         # different Vs
-        np.append(Vs, input[:iStar])
+        Vs = np.append(
+            Vs,
+            V[:iStar],
+        )
+
         for i in range(M):
-            col = input[: iStar + 1]
-            np.append(Vs, col)
-        np.append(Vs, input[:0])
+            col = V[: iStar + 1]
+            Vs = np.append(
+                Vs,
+                col,
+            )
+        Vs = np.append(
+            Vs,
+            V[:0],
+        )
         for i in range(M):
-            col = input[: iStar - 1]
-            np.append(Vs, col)
-        np.append(Vs, input[:iStar])
-    VStar = np.cross(
-        np.array(
-            [
-                [np.cos(thetaStar), np.sin(thetaStar)],
-                [np.sin(-thetaStar), np.cos(thetaStar)],
-            ]
-        ),
-        Vs,
+            col = V[: iStar - 1]
+            Vs = np.append(
+                Vs,
+                col,
+            )
+        Vs = np.append(
+            Vs,
+            V[:iStar],
+        )
+    rotationMatrix2 = np.array(
+        [
+            [np.cos(thetaStar), np.sin(thetaStar)],
+            [-np.sin(thetaStar), np.cos(thetaStar)],
+        ]
     )
+    print(Vs)
+    print(Vs.shape, rotationMatrix2.shape)
+    VStar = rotationMatrix2 @ Vs
+
     # Algorithm #2
     # Input Ly, dStarP, VStar, Ns, M - all fake values for the next few lines
     dStarP = 0
@@ -117,19 +127,19 @@ def main():
 
     # Line 25: Wn
     Wn = np.array([])
-    np.append(Wn, x[n, 1])
-    np.append(Wn, y[n, 1])
+    Wn = np.append(Wn, x[n, 1])
+    Wn = np.append(Wn, y[n, 1])
     for i in range(2, Ns):
-        np.append(Wn, x[n, i])
-        np.append(Wn, y[n, i])
+        Wn = np.append(Wn, x[n, i])
+        Wn = np.append(Wn, y[n, i])
 
     # Line 26: Wf
     Wf = np.array([])
-    np.append(Wf, x[n, 1])
-    np.append(Wf, y[n, 1])
+    Wf = np.append(Wf, x[n, 1])
+    Wf = np.append(Wf, y[n, 1])
     for i in range(2, Ns):
         np.append(Wf, x[n, i])
-        np.append(Wf, y[n, i])
+        Wf = np.append(Wf, y[n, i])
 
 
 if __name__ == "__main__":
