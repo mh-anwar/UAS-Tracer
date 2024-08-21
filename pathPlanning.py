@@ -8,7 +8,7 @@ import numpy as np
 # Final output: two sets of Waypoints - Wn and Wf - Wn is coordinates of straight line path primitives closert to UAS, Wf is the opposite
 
 
-def pathPlanner(V=np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])):
+def main(V=np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])):
     M = V.shape[1] - 1  # this is the number of edges, which is less than the full loop
     # Output: d*, θ*, Vf
 
@@ -105,4 +105,4 @@ if __name__ == "__main__":
         )
         or [[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]]
     )
-    pathPlanner(V)
+    main(V)
