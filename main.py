@@ -2,18 +2,26 @@
 import cv2
 import streamlit as st
 from ultralytics import YOLO
+import pathPlanning
+import trajectoryControl
 
 yolo = YOLO("yolov10s.pt")
 
-st.title("Drone Feed HUD")
-
+st.title("Drone Feed HUD")  # Title for Streamlit HUD
 source = cv2.VideoCapture(0)  # device for video capture
 frame_placeholder = st.empty()  # placeholder for camera feed
 
-# Get these values from pathPlanning and trajectory scripts
-st.write("Drone heading: 33 degrees")
-st.write("Drone direction: North-West")
+#! Run path planner
+st.write("Running path planner...")
+Wn, Wf = pathPlanning.main()
+st.write("Waypoints generated: ", Wn, Wf)
 
+#! Run trajectory control
+
+#! Show live updated data (hopefully?) - probably use multithreading and get values from trajectory control to display in Streamlit HUD
+# Lowest priority
+
+#! Run object detection and display camera feed
 while cv2.waitKey(1) != 27:  # Escape
     has_frame, frame = source.read()
 
@@ -27,6 +35,7 @@ while cv2.waitKey(1) != 27:  # Escape
         all_classes = result.names
 
         for box in result.boxes:
+            #! Display bounding boxes
             if box.conf[0] > 0.5:  # display if confidence of object is >50%
                 # get coordinates and map to integers
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
