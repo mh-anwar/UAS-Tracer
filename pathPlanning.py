@@ -52,59 +52,51 @@ def main():
     VStar = rotationMatrix2 @ Vs
     print("VStar", VStar)
     print()
+
     print("Algorithm 2: Waypoint Generation")
     # Algorithm #2
     # Input Ly, dStarP, VStar, Ns, M - all fake values for the next few lines
-    dStarP = 0
-    Ly = 2
-    Ns = 10
-    y = []  # I think this is some multi-dimension array
-    x = 0
-    n = 0
-    f = 0
-    # Output Wn, Wf
+    Ly = 2  #! need
+    Ns = 10  #! need
+    dStarP = (dStar - Ly) / (Ns - 1)
+    # I think Yn, Xn, Yf, Xf are two single dimension arrays
+    yn = np.zeros(Ns)
+    yf = np.zeros(Ns)
+    xn = np.zeros(Ns)
+    xf = np.zeros(Ns)
 
-    for _ in range(len(y)):
-        # I think this is populating n rows of y with Ly/2?
-        y[n, 1] = Ly / 2
-        y[f, 1] = Ly / 2
+    # Output Wn, Wf
+    # Line 1-2
+    yn[0] = Ly / 2
+    yf[0] = Ly / 2
+
     # Line 3
-    for j in range(2, Ns):
-        y[n, j] = y[n, j - 1] + dStarP
-        y[f, j] = y[f, j - 1] + dStarP
+    for j in range(1, Ns):
+        yn[j] = yn[j - 1] - dStarP
+        yf[j] = yf[j - 1] - dStarP
 
     # Line 7
-    for i in range(len(Ns)):
-        for j in range(M, 2):
-            if VStar[2, j] >= y[n, i]:
-                k = (VStar[1, j] - VStar[1, j + 1]) / (VStar[2, j] - VStar[2, j + 1])
-                x[n, i] = (
-                    k * (y[n, i] - VStar[2, j]) + VStar[1, j]
-                )  # where does x come from
+    for i in range(Ns):
+        for j in range(
+            M - 1, 0, -1
+        ):  # might be troublesome, check if it should be M-1 or M and 0 or 2 and -1 (from j = M to 2)
+            if VStar[1, j] >= yn[i]:
+                k = (VStar[0, j] - VStar[0, j + 1]) / (VStar[1, j] - VStar[1, j + 1])
+                xn[i] = k * (yn[i] - VStar[1, j]) + VStar[0, j]
     # Line 16
-    for i in range(len(Ns)):
-        for j in range(2, M):
-            if VStar[2, j] >= y[f, i]:
-                k = (VStar[1, j] - VStar[1, j - 1]) / (VStar[2, j] - VStar[2, j - 1])
-                x[f, i] = (
-                    k * (y[f, i] - VStar[2, j]) + VStar[1, j]
-                )  # where does x come from
+    for i in range(Ns):
+        for j in range(1, M):
+            if VStar[1, j] >= yf[i]:
+                k = (VStar[0, j] - VStar[0, j - 1]) / (VStar[1, j] - VStar[1, j - 1])
+                xf[i] = k * (yf[i] - VStar[1, j]) + VStar[0, j]
 
     # Line 25: Wn
-    Wn = np.array([])
-    Wn = np.append(Wn, x[n, 1])
-    Wn = np.append(Wn, y[n, 1])
-    for i in range(2, Ns):
-        Wn = np.append(Wn, x[n, i])
-        Wn = np.append(Wn, y[n, i])
+    Wn = np.vstack((xn, yn))
 
     # Line 26: Wf
-    Wf = np.array([])
-    Wf = np.append(Wf, x[n, 1])
-    Wf = np.append(Wf, y[n, 1])
-    for i in range(2, Ns):
-        np.append(Wf, x[n, i])
-        Wf = np.append(Wf, y[n, i])
+    Wf = np.vstack((xf, yf))
+
+    print(Wn, Wf)
 
 
 if __name__ == "__main__":
