@@ -1,19 +1,17 @@
 # Implement "A path planning algorithm for a crop monitoring fixed-wing unmanned aerial system"
 # https://link.springer.com/article/10.1007/s11432-023-4087-4
 
-# Algorithm 1: Sweep direct optimization
 import numpy as np
 
-# Input: Map vertex Matrix - 40 by 140m rectangle - "the matrix containing column-wise stacked polygon vertices"
-V = np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])
-# ([[0, 0], [0, 40], [140, 40], [140, 0], [0, 0]])
-# do I use 2x5 or 5x2
-M = V.shape[1] - 1  # this is the number of edges, which is less than the full loop
-print("# of Cols: ", M)
+# Required Input: Map vertex Matrix - 40 by 140m rectangle - "the matrix containing column-wise stacked polygon vertices"
+
+# Final output: two sets of Waypoints - Wn and Wf - Wn is coordinates of straight line path primitives closert to UAS, Wf is the opposite
 
 
-# Output: d*, θ*, Vf
-def main():
+def pathPlanner(V=np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])):
+    M = V.shape[1] - 1  # this is the number of edges, which is less than the full loop
+    # Output: d*, θ*, Vf
+
     print("Algorithm 1: Sweep Direction Optimization")
     # Algorithm 1
     # d, θ and Vf are labeled as OUTput for now
@@ -97,7 +95,14 @@ def main():
     Wf = np.vstack((xf, yf))
 
     print(Wn, Wf)
+    return Wn, Wf
 
 
 if __name__ == "__main__":
-    main()
+    V = np.array(
+        input(
+            "Enter the map vertex matrix (default: [[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]]): "
+        )
+        or [[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]]
+    )
+    pathPlanner(V)
