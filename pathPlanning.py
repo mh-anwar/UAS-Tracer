@@ -94,7 +94,6 @@ def main(V=np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])):
     # Line 26: Wf
     Wf = np.vstack((xf, yf))
 
-    print(Wn, Wf)
     return Wn, Wf
 
 
@@ -105,4 +104,5 @@ if __name__ == "__main__":
         )
         or [[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]]
     )
-    main(V)
+    Wn, Wf = main(V)
+    print("Waypoints generated: ", Wn, Wf)
