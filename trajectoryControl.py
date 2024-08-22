@@ -1,5 +1,6 @@
 # Integration with Sarthak's code
 import math
+import pathPlanning
 
 
 # Carrot-Chasing Algorithm
@@ -56,10 +57,8 @@ def main():
     current_position = (10, 10)  # Replace with actual data
     current_heading = 90  # Replace with actual data
     # Path planning algorithm generates the path and velocity command
-    dStar, thetaStar, Vf, VPrime = path_planning_algorithm()
-    # Create a path from VPrime (Simplified example)
-    waypoints = [(x, y) for x, y in zip(VPrime[0], VPrime[1])]
-    desired_velocity = Vf
+    Wn, Wf = pathPlanning.main()
+    waypoints = Wn  # Use Wn not Wf
     # Set the carrot-chasing distance
     d = 10
     # Path-following loop (would typically be inside a control loop)
