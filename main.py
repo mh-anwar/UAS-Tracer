@@ -8,7 +8,7 @@ import trajectoryControl
 yolo = YOLO("yolov10s.pt")
 
 st.title("Drone Feed HUD")  # Title for Streamlit HUD
-source = cv2.VideoCapture(0)  # device for video capture
+source = cv2.VideoCapture(1, cv2.CAP_DSHOW) #captureDevice = camera
 frame_placeholder = st.empty()  # placeholder for camera feed
 
 #! Run path planner
