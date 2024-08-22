@@ -2,14 +2,18 @@
 
 import cv2
 # Open the webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1, cv2.CAP_DSHOW) #captureDevice = camera
+
 if not cap.isOpened():
     print("Unable to read camera feed")
     exit()
 # Adjust camera settings
 # Further increase brightness and contrast
-cap.set(cv2.CAP_PROP_BRIGHTNESS, 0.7)  # Adjust and test with values between 0 and 1
-cap.set(cv2.CAP_PROP_CONTRAST, 0.7)    # Adjust and test with values between 0 and 1
+#cap.set(cv2.CAP_PROP_BRIGHTNESS, 0.7)  # Adjust and test with values between 0 and 1
+#cap.set(cv2.CAP_PROP_CONTRAST, 0.7)    # Adjust and test with values between 0 and 1
+
+
+
 # Remove exposure adjustment to use the default
 # cap.set(cv2.CAP_PROP_EXPOSURE, -6)     # Commented out to use default exposure
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # Set resolution width
