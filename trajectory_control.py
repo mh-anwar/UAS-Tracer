@@ -1,6 +1,6 @@
 # Integration with Sarthak's code
 import math
-import pathPlanning
+import path_planning
 
 
 # Carrot-Chasing Algorithm
@@ -57,7 +57,7 @@ def main():
     current_position = (10, 10)  # Replace with actual data
     current_heading = 90  # Replace with actual data
     # Path planning algorithm generates the path and velocity command
-    Wn, Wf = pathPlanning.main()
+    Wn, Wf = path_planning.main()
     waypoints = Wn  # Use Wn not Wf
     # Set the carrot-chasing distance
     d = 10

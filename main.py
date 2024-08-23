@@ -1,11 +1,11 @@
 # Executes HUD, runs basic object detection and will have data from ./pathPlanning.py
-import pathPlanning
+import path_planning
 import object_detection
 import trajectoryControl
 
 
 #! Run path planner
-Wn, Wf = pathPlanning.main()
+Wn, Wf = path_planning.main()
 
 #! Run trajectory control
 
