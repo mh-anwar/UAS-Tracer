@@ -7,7 +7,9 @@ Implemented using path planning algorithm from [A path planning algorithm for a 
   - ```conda create -n target_tracking```
   - ```conda activate target_tracking```
 - Run ```pip install -r requirements.txt```
-- Start the "ground control" ```streamlit run main.py```
+- Start the "ground control" with ```streamlit run main.py```
 
 ### Individual Script Testing
-- Run ```python3 pathPlanning.py``` to generate Waypoints given the input vector map
+- Run ```python3 path_planning.py``` to generate Waypoints given the input vector map
+- Run ```python3 object_detection.py``` to detect objects given a camera feed - requires Waypoints as input
+- Run ```python3 trajectory_generation.py``` to generate heading commands and a waypoint
