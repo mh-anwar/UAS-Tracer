@@ -73,6 +73,7 @@ def main(waypoints):
         print(
             f"Waypoint {i}: Carrot={carrot_position}, Heading Command={control_command}"
         )
+        return carrot_position, control_command
 
 
 if __name__ == "__main__":
