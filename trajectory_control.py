@@ -51,14 +51,12 @@ def calculate_heading_error(current_heading, desired_heading):
 
 
 # ------------------- Main Function -------------------
-def main():
+def main(waypoints):
     print("Trajectory Control")
     # Example current position and heading (these would be real-time data in practice)
     current_position = (10, 10)  # Replace with actual data
     current_heading = 90  # Replace with actual data
-    # Path planning algorithm generates the path and velocity command
-    Wn, Wf = path_planning.main()
-    waypoints = Wn  # Use Wn not Wf
+
     # Set the carrot-chasing distance
     d = 10
     # Path-following loop (would typically be inside a control loop)
@@ -78,4 +76,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Path planning algorithm generates the path and velocity command
+    Wn, Wf = path_planning.main()
+    waypoints = Wn  # Use Wn not Wf
+    main(waypoints)
