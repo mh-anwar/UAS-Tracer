@@ -114,9 +114,8 @@ def track_object(cap, tracker, bounding_box, Wn):
     return True  # Signal to continue tracking
 
 
-def main(Wn):
+def main(Wn, cap):
     # Camera setup
-    cap = setup_camera()
 
     while True:
         # Capture initial frame for object selection
