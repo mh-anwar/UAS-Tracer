@@ -2,7 +2,7 @@
 import streamlit as st
 import cv2
 import path_planning
-import object_detection
+import testing.object_detection as object_detection
 import trajectory_control
 import pandas as pd
 import platform
@@ -114,7 +114,6 @@ def track_object(
 
 
 def main():
-
     #! Base HUD Setup
     st.title("UAS Tracer")
     current_status = st.empty()
@@ -140,8 +139,9 @@ def main():
 
     #! Run trajectory control
     current_status.text("Running trajectory control...")
-    trajectory_control.main(Wn)
-    # ? NEED TO ADD TABLE FOR TRAJECTORY CONTROL DATA
+    position, heading = trajectory_control.main(Wn)
+    st.write("Position:", position)
+    st.write("Heading:", heading)
 
     #! Run object detection
     while True:
