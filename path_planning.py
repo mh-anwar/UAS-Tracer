@@ -54,9 +54,11 @@ def main(V=np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])):
     print("Algorithm 2: Waypoint Generation")
     # Algorithm #2
     # Input Ly, dStarP, VStar, Ns, M - all fake values for the next few lines
-    Ly = 2  #! need
-    Ns = 10  #! need
+    altitude = 100  #! Ideally the altitude is provided by the aircraft, we assume constant altitude
+    Ly = 833  # 640 pixels (idek what units are being used)
+    Ns = 10  #! need to calculate
     dStarP = (dStar - Ly) / (Ns - 1)
+
     # I think Yn, Xn, Yf, Xf are two single dimension arrays
     yn = np.zeros(Ns)
     yf = np.zeros(Ns)
@@ -94,7 +96,7 @@ def main(V=np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])):
     # Line 26: Wf
     Wf = np.vstack((xf, yf))
 
-    f = open("waypoints.txt", "a")
+    f = open("waypoints.txt", "w")
     f.write(str(Wn) + "\n" + str(Wf) + "\n")
     f.close()
 
