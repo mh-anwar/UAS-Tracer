@@ -1,6 +1,6 @@
-# Object Detection from UAS Camera Feed
 import cv2
 import platform
+import numpy as np
 
 
 def setup_camera(camera_index=0, resWidth=1280, resHeight=720):
@@ -15,12 +15,6 @@ def setup_camera(camera_index=0, resWidth=1280, resHeight=720):
     if not cap.isOpened():
         print("Unable to read camera feed")
         exit()
-    # Adjust camera settings
-    # Increase brightness and contrast
-    # cap.set(cv2.CAP_PROP_BRIGHTNESS, 0.7)  # Adjust and test with values between 0 and 1
-    # cap.set(cv2.CAP_PROP_CONTRAST, 0.7)    # Adjust and test with values between 0 and 1
-    # Remove exposure adjustment to use the default
-    # cap.set(cv2.CAP_PROP_EXPOSURE, -6)     # Commented out to use default exposure
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, resWidth)  # Set resolution width
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, resHeight)  # Set resolution height
 
@@ -45,11 +39,8 @@ def select_roi(frame):
     return bounding_box
 
 
-def initialize_tracker(
-    tracker_type="CSRT",
-):
+def initialize_tracker(tracker_type="CSRT"):
     # Initialize and return tracker based on chosen tracking type
-    # this function never asks for the tracker type, but leaving KCF and MOSSE options in case of future use
     trackers = {
         "CSRT": cv2.TrackerCSRT_create,
         "KCF": cv2.TrackerKCF_create,
@@ -64,7 +55,12 @@ def initialize_tracker(
     return tracker
 
 
-def track_object(cap, tracker, bounding_box):
+def track_object(cap, tracker, bounding_box, Wn):
+    # Define display height including space for text
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    display_height = frame_height + 100
+
     # Initialize tracker with frame and bounding box
     tracker.init(get_frame(cap), bounding_box)
 
@@ -74,9 +70,9 @@ def track_object(cap, tracker, bounding_box):
             print("Failed to grab frame")
             break
 
-        ok, bounding_box = tracker.update(frame)
+        success, bounding_box = tracker.update(frame)
 
-        if ok:
+        if success:
             (x, y, w, h) = [int(v) for v in bounding_box]
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
         else:
@@ -90,7 +86,25 @@ def track_object(cap, tracker, bounding_box):
                 2,
             )
 
-        cv2.imshow("Object Tracking", frame)
+        # Create a blank image with additional space for text
+        display_image = np.zeros((display_height, frame_width, 3), dtype=np.uint8)
+        display_image[:frame_height, :frame_width] = frame
+
+        # Add text below the video feed
+        text = str(Wn)
+        cv2.putText(
+            display_image,
+            text,
+            (10, frame_height + 50),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 255, 255),
+            2,
+            cv2.LINE_AA,
+        )
+
+        # Display the result
+        cv2.imshow("Object Tracking", display_image)
 
         key = cv2.waitKey(1) & 0xFF
         if key == 27:  # ESC key
@@ -100,7 +114,7 @@ def track_object(cap, tracker, bounding_box):
     return True  # Signal to continue tracking
 
 
-def main():
+def main(Wn):
     # Camera setup
     cap = setup_camera()
 
@@ -115,7 +129,7 @@ def main():
         tracker = initialize_tracker()
 
         # Track the object until 'q' is pressed
-        continue_tracking = track_object(cap, tracker, bounding_box)
+        continue_tracking = track_object(cap, tracker, bounding_box, Wn)
         if not continue_tracking:
             print("Reselecting object...")
 
@@ -128,4 +142,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(input("Enter the waypoints: "))
