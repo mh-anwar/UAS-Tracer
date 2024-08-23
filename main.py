@@ -1,7 +1,7 @@
 # Executes HUD, runs basic object detection and will have data from ./pathPlanning.py
 import path_planning
 import object_detection
-import trajectoryControl
+import trajectory_control
 
 
 #! Run path planner
@@ -19,7 +19,7 @@ object_detection.main(Wn)
 """
 Idea: use one camera feed in main.py
 - Run path planner
-- Run trajectory control
+- Run trajectory control - feed Wn from main.py to trajectory control
 - Run object detection with the same camera feed
 - Display data from path planner and trajectory control in HUD
 - Display object detection results in it's own CV2 window (no streaming to streamlit)
