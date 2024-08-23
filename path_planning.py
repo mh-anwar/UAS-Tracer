@@ -94,6 +94,10 @@ def main(V=np.array([[0, 0, 140, 140, 0], [0, 40, 40, 0, 0]])):
     # Line 26: Wf
     Wf = np.vstack((xf, yf))
 
+    f = open("waypoints.txt", "a")
+    f.write(str(Wn) + "\n" + str(Wf) + "\n")
+    f.close()
+
     return Wn, Wf
 
 
